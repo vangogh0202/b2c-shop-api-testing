@@ -1,0 +1,271 @@
+{
+  "info": {
+    "name": "华测B2C商城",
+    "description": "华测B2C在线商城（ShopXO）接口自动化回归套件：登录→搜索→加购→提取购物车ids→结算提取address_id→下单。可用 Newman 一键执行。",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "用户登录",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"状态码为200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test(\"登录业务码code=0\", function () {",
+              "    var json = pm.response.json();",
+              "    pm.expect(json.code).to.eql(0);",
+              "});",
+              "pm.test(\"提示登录成功\", function () {",
+              "    var json = pm.response.json();",
+              "    pm.expect(json.msg).to.include(\"登录成功\");",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "X-Requested-With", "value": "XMLHttpRequest", "type": "text" }
+        ],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            { "key": "accounts", "value": "admin", "type": "text" },
+            { "key": "pwd", "value": "123456", "type": "text" },
+            { "key": "type", "value": "username", "type": "text" }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/index.php?s=/index/user/login.html",
+          "host": ["{{baseUrl}}"],
+          "path": ["index.php"],
+          "query": [ { "key": "s", "value": "/index/user/login.html" } ]
+        }
+      }
+    },
+    {
+      "name": "搜索商品",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"状态码为200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test(\"搜索业务码code=0\", function () {",
+              "    var json = pm.response.json();",
+              "    pm.expect(json.code).to.eql(0);",
+              "});",
+              "pm.test(\"返回商品数据非空\", function () {",
+              "    var json = pm.response.json();",
+              "    pm.expect(json.data).to.not.be.null;",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "X-Requested-With", "value": "XMLHttpRequest", "type": "text" }
+        ],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            { "key": "wd", "value": "手机", "type": "text" },
+            { "key": "page", "value": "1", "type": "text" }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/index.php?s=/index/search/goodslist.html",
+          "host": ["{{baseUrl}}"],
+          "path": ["index.php"],
+          "query": [ { "key": "s", "value": "/index/search/goodslist.html" } ]
+        }
+      }
+    },
+    {
+      "name": "添加购物车",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"状态码为200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test(\"加购业务码code=0\", function () {",
+              "    var json = pm.response.json();",
+              "    pm.expect(json.code).to.eql(0);",
+              "});",
+              "pm.test(\"提示加入成功\", function () {",
+              "    var json = pm.response.json();",
+              "    pm.expect(json.msg).to.include(\"成功\");",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "X-Requested-With", "value": "XMLHttpRequest", "type": "text" }
+        ],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            { "key": "goods_id", "value": "7", "type": "text" },
+            { "key": "stock", "value": "1", "type": "text" },
+            { "key": "spec", "value": "[]", "type": "text" }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/index.php?s=/index/cart/save.html",
+          "host": ["{{baseUrl}}"],
+          "path": ["index.php"],
+          "query": [ { "key": "s", "value": "/index/cart/save.html" } ]
+        }
+      }
+    },
+    {
+      "name": "获取购物车列表",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "var html = pm.response.text();",
+              "var re = /value=\\\\?\"(\\d+)\\\\?\"\\s+data-am-ucheck/g;",
+              "var vals = []; var m;",
+              "while ((m = re.exec(html)) !== null) { vals.push(parseInt(m[1])); }",
+              "var goods = vals.filter(function (v) { return v > 1; });",
+              "var cartId = goods.length ? String(Math.max.apply(null, goods)) : undefined;",
+              "pm.environment.set(\"ids\", cartId);",
+              "console.log(\"购物车记录 = \" + goods.join(\",\") + \"; 取最新ids = \" + cartId);",
+              "pm.test(\"成功提取购物车ids\", function () {",
+              "    pm.expect(cartId).to.not.be.undefined;",
+              "    pm.expect(cartId).to.not.be.null;",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/index.php?s=/index/cart/index.html",
+          "host": ["{{baseUrl}}"],
+          "path": ["index.php"],
+          "query": [ { "key": "s", "value": "/index/cart/index.html" } ]
+        }
+      }
+    },
+    {
+      "name": "获取结算页",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "var html = pm.response.text();",
+              "var am = html.match(/name=\\\\?\"address_id\\\\?\"\\s+value=\\\\?\"(\\d+)\\\\?\"/);",
+              "var addressId = am ? am[1] : undefined;",
+              "pm.environment.set(\"address_id\", addressId);",
+              "console.log(\"address_id = \" + addressId);",
+              "pm.test(\"成功提取address_id\", function () {",
+              "    pm.expect(addressId).to.not.be.undefined;",
+              "    pm.expect(addressId).to.not.be.null;",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            { "key": "ids", "value": "{{ids}}", "type": "text" },
+            { "key": "buy_type", "value": "cart", "type": "text" }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/index.php?s=/index/buy/index.html",
+          "host": ["{{baseUrl}}"],
+          "path": ["index.php"],
+          "query": [ { "key": "s", "value": "/index/buy/index.html" } ]
+        }
+      }
+    },
+    {
+      "name": "提交订单",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"状态码为200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test(\"返回为JSON\", function () {",
+              "    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+              "});",
+              "var ok = false; var json = null;",
+              "try { json = pm.response.json(); ok = true; } catch (e) {}",
+              "pm.test(\"下单业务码code=0\", function () {",
+              "    pm.expect(ok).to.be.true;",
+              "    if (ok) pm.expect(json.code).to.eql(0);",
+              "});",
+              "pm.test(\"返回订单号\", function () {",
+              "    if (ok) {",
+              "        pm.expect(json.data.order_ids).to.exist;",
+              "        pm.expect(json.data.order_ids.length).to.be.above(0);",
+              "    } else { pm.expect(ok).to.be.true; }",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "X-Requested-With", "value": "XMLHttpRequest", "type": "text" }
+        ],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            { "key": "goods_id", "value": "0", "type": "text" },
+            { "key": "buy_type", "value": "cart", "type": "text" },
+            { "key": "stock", "value": "1", "type": "text" },
+            { "key": "spec", "value": "", "type": "text" },
+            { "key": "ids", "value": "{{ids}}", "type": "text" },
+            { "key": "address_id", "value": "{{address_id}}", "type": "text" },
+            { "key": "payment_id", "value": "3", "type": "text" },
+            { "key": "user_note", "value": "", "type": "text" },
+            { "key": "site_model", "value": "0", "type": "text" }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/index.php?s=/index/buy/add.html",
+          "host": ["{{baseUrl}}"],
+          "path": ["index.php"],
+          "query": [ { "key": "s", "value": "/index/buy/add.html" } ]
+        }
+      }
+    }
+  ]
+}

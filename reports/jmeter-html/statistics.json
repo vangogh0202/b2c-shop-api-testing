@@ -1,0 +1,50 @@
+{
+  "Total" : {
+    "transaction" : "Total",
+    "sampleCount" : 300,
+    "errorCount" : 0,
+    "errorPct" : 0.0,
+    "meanResTime" : 100.16000000000005,
+    "medianResTime" : 94.0,
+    "minResTime" : 60.0,
+    "maxResTime" : 229.0,
+    "pct1ResTime" : 133.90000000000003,
+    "pct2ResTime" : 149.0,
+    "pct3ResTime" : 199.93000000000006,
+    "throughput" : 28.991109393119444,
+    "receivedKBytesPerSec" : 144.60165158726323,
+    "sentKBytesPerSec" : 8.451021634615383
+  },
+  "2-用户登录接口(POST)" : {
+    "transaction" : "2-用户登录接口(POST)",
+    "sampleCount" : 150,
+    "errorCount" : 0,
+    "errorPct" : 0.0,
+    "meanResTime" : 96.63999999999999,
+    "medianResTime" : 93.5,
+    "minResTime" : 60.0,
+    "maxResTime" : 229.0,
+    "pct1ResTime" : 125.9,
+    "pct2ResTime" : 149.0,
+    "pct3ResTime" : 210.64000000000033,
+    "throughput" : 14.823599169878447,
+    "receivedKBytesPerSec" : 6.326086755114142,
+    "sentKBytesPerSec" : 4.357327490364661
+  },
+  "1-商品搜索接口(POST)" : {
+    "transaction" : "1-商品搜索接口(POST)",
+    "sampleCount" : 150,
+    "errorCount" : 0,
+    "errorPct" : 0.0,
+    "meanResTime" : 103.67999999999999,
+    "medianResTime" : 96.0,
+    "minResTime" : 62.0,
+    "maxResTime" : 225.0,
+    "pct1ResTime" : 134.0,
+    "pct2ResTime" : 150.79999999999995,
+    "pct3ResTime" : 212.25000000000023,
+    "throughput" : 14.580093312597201,
+    "receivedKBytesPerSec" : 139.22280508845256,
+    "sentKBytesPerSec" : 4.214558223172628
+  }
+}

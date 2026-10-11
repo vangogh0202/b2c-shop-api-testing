@@ -1,0 +1,12 @@
+{
+  "name": "测试环境",
+  "values": [
+    {
+      "key": "baseUrl",
+      "value": "http://shop-xo.hctestedu.com",
+      "type": "default",
+      "enabled": true
+    }
+  ],
+  "_postman_variable_scope": "environment"
+}
