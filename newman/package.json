@@ -1,15 +1,16 @@
 {
   "name": "postman-newman",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "华测B2C接口自动化回归套件（Postman + Newman + htmlextra 报告）",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "regression": "newman run ../postman/huace-b2c.collection.json -e ../postman/huace-b2c.environment.json -r cli,htmlextra --reporter-htmlextra-export ../reports/newman-回归报告.html"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": ["newman", "api-testing", "regression"],
   "license": "ISC",
   "dependencies": {
     "newman-reporter-htmlextra": "^1.23.1"
+  },
+  "devDependencies": {
+    "newman": "^6.2.2"
   }
 }

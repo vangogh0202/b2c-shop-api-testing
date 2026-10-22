@@ -42,12 +42,20 @@ huace-b2c
 
 ```bash
 cd newman
-npm install
+npm install          # newman 与 htmlextra 报告器都已声明在 package.json
+npm run regression   # 6 请求 / 15 断言，约 1.5 秒全绿，并导出 HTML 报告
+```
+
+等价的手动命令（自行指定报告器与导出路径）：
+
+```bash
 npx newman run ../postman/huace-b2c.collection.json \
   -e ../postman/huace-b2c.environment.json \
-  -r htmlextra \
+  -r cli,htmlextra \
   --reporter-htmlextra-export ../reports/newman-回归报告.html
 ```
+
+> 踩坑记录：若把 newman 装在全局，newman 不会去项目目录解析报告器，会报 `could not find "htmlextra" reporter`。因此 newman 本身也作为 devDependency 装进项目，保证 `npm install && npm run regression` 在任意机器上可复现。
 
 ### 2. JMeter 性能测试
 
